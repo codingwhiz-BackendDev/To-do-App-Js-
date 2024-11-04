@@ -1,0 +1,173 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <style>
+        * {
+            margin: 0%;
+            padding: 0%;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-image: radial-gradient(blue, purple);
+            width: 100%;
+            height: 100%;
+        }
+
+        .box {
+            width: 400px;
+            margin: auto;
+            position: absolute;
+            left: 50%;
+            top: 30%;
+            transform: translate(-50%, -50%);
+            background-color: aliceblue;
+            padding: 35px 50px;
+            border-radius: 10px;
+
+        }
+
+        h3 {
+            font-family: 'Courier New', Courier, monospace;
+            padding: 12px 8px 12px 12px;
+            color: darkblue;
+        }
+
+        input[type=text] {
+            padding: 15px 25px;
+            margin: 0%;
+            border-radius: 50px;
+            border: none;
+            background-color: lightgray;
+            width: 90%;
+            outline: none;
+            flex: 1;
+        }
+
+        input[type=button] {
+            border: none;
+            outline: none;
+            background-color: orangered;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        ol li {
+            font-size: 17px;
+            padding: 12px 8px 12px 20px;
+            user-select: none;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        ol li::before {
+            content: '';
+            position: absolute;
+            height: 28px;
+            width: 28px;
+            border-radius: 50%;
+        }
+
+        ol li.checked {
+            color: #555;
+            text-decoration: line-through;
+        }
+
+        .error {
+            animation: shake 0.1s linear 10;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-2px);
+            }
+
+            50% {
+                transform: translateX(0px);
+            }
+
+            75% {
+                transform: translateX(2px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="box">
+            <h3>To-Do App</h3>
+            <div class="flex">
+                <input type="text" id="text" placeholder="Add your task">
+                <input type="button" onclick="addTask()" value="Add" id="">
+            </div>
+            <ol id="list-container">
+                <!-- <li class="checked">A good task</li>
+                <li>A good task</li>
+                <li>A good task</li> -->
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        text = document.getElementById('text');
+        ulContainer = document.getElementById('list-container');
+        function addTask() {
+            if (text.value == '') {
+                text.classList.add('error')
+                setTimeout(() => {
+                    text.classList.remove('error')
+                }, 1000)
+            } else {
+                li = document.createElement('li');
+                li.innerHTML = text.value;
+                ulContainer.appendChild(li)
+
+                span = document.createElement('span')
+                span.innerHTML = 'X'
+                li.appendChild(span)
+
+            }
+            text.value = ''
+            saveData()
+        }
+        ulContainer.addEventListener('click', function (e) {
+            if (e.target.tagName == 'LI') {
+                e.target.classList.toggle("checked")
+                saveData()
+            } else if (e.target.tagName == 'SPAN') {
+                e.target.parentElement.remove();
+                saveData()
+            }
+        })
+        //Save data to browser
+        function saveData() {
+            localStorage.setItem("data", ulContainer.innerHTML);
+        }
+        //Show saved data
+        function showTask() {
+            ulContainer.innerHTML = localStorage.getItem("data")
+        }
+        showTask()
+    </script>
+</body>
+
+</html>
